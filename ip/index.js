@@ -1,4 +1,4 @@
-//axios import buraya gelecek
+import axios from 'axios';
 
 var benimIP;
 
@@ -36,6 +36,7 @@ async function ipAdresimiAl(){
 	iyice anlamanız gerekmektedir.
 	
 */
+
 /*
 	ADIM 3: Argümanı sadece 1 nesne kabül eden bir fonksiyon oluşturun.
     DOM metotlarını ve özelliklerini kullanarak, şunları gerçekleştirin:
@@ -54,6 +55,7 @@ async function ipAdresimiAl(){
     </div>
 */
 
+
 /*
 	ADIM 4: API'den alınan verileri kullanarak ADIM 3'te verilen yapıda bir kart oluşturun ve 
 	bu kartı DOM olarak .cards elementinin içine ekleyin. 
@@ -70,3 +72,47 @@ async function ipAdresimiAl(){
 
 
 //kodlar buraya gelecek
+const url = axios.get("https://apis.ergineer.com/ipadresim")
+url 
+	.then((resolve) => {
+		console.log(resolve.data)
+		const getIP = axios.get("https://apis.ergineer.com/ipgeoapi/"+resolve.data);
+getIP
+	.then((res) => {
+		console.log(res.data);
+		ipContainer(res.data)
+		
+	});
+	})
+	
+
+
+	const ipContainer = (card) => {
+		const cards = document.querySelector(".cards");
+		const cart = document.createElement("div");
+		cart.classList.add("card");
+		cards.append(cart);
+		const bayrakImg = document.createElement("img");
+		bayrakImg.setAttribute("src",`${card.ülkebayrağı}`)
+		cart.append(bayrakImg);
+		const info = document.createElement("div");
+		info.classList.add("card-info")
+		cart.append(info);
+		const title = document.createElement("h3")
+		title.classList.add("ip");
+		title.textContent = `${card.sorgu}`;
+		const ulke = document.createElement("p");
+		ulke.classList.add("ulke");
+		ulke.textContent = card.ülke + " (" +card.ülkeKodu +")";
+		const enlem = document.createElement("p");
+		enlem.textContent = "Enlem: " + card.enlem + " Boylam: " + card.boylam;
+		const sehir = document.createElement("p");
+		sehir.textContent = "Şehir: " + card.şehir;
+		const saat = document.createElement("p");
+		saat.textContent = "Saat dilimi:" + card.saatdilimi
+		const para = document.createElement("p");
+		para.textContent = "Para birimi: " + card.parabirimi;
+		const isp = document.createElement("p");
+		isp.textContent = "ISP: " + card.isp;
+		info.append(title,ulke,enlem,sehir,saat,para,isp);
+	}
